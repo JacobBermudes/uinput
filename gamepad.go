@@ -51,6 +51,11 @@ type Gamepad interface {
 	// RightStickMoveY performs a movement of the right stick along the y-axis
 	RightStickMoveY(value float32) error
 
+	// LeftTrigger presses the left trigger (0.0 to 1.0)
+	LeftTrigger(value float32) error
+	// RightTrigger presses the right trigger (0.0 to 1.0)
+	RightTrigger(value float32) error
+
 	// LeftStickMove moves the left stick along the x and y-axis
 	LeftStickMove(x, y float32) error
 	// RightStickMove moves the right stick along the x and y-axis
@@ -67,6 +72,16 @@ type Gamepad interface {
 type vGamepad struct {
 	name       []byte
 	deviceFile *os.File
+}
+
+func (vg vGamepad) LeftTrigger(value float32) error {
+	// Используем встроенную константу absZ
+	return vg.sendStickAxisEvent(absZ, value)
+}
+
+func (vg vGamepad) RightTrigger(value float32) error {
+	// Используем встроенную константу absRZ
+	return vg.sendStickAxisEvent(absRZ, value)
 }
 
 // CreateGamepad will create a new gamepad using the given uinput
